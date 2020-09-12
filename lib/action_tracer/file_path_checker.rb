@@ -1,7 +1,7 @@
 module ActionTracer
-  class FileTypeChecker
-    def initialize
-      @pwd_path = Pathname.pwd.to_s
+  class FilePathChecker
+    def initialize(pwd_path)
+      @pwd_path = pwd_path
     end
 
     def app?(path)
