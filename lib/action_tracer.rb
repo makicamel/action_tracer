@@ -1,16 +1,20 @@
 require "action_tracer/version"
 require "action_tracer/file_type_checker"
+require "action_tracer/logger"
 
 module ActionTracer
   class Error < StandardError; end
 
   callback_caller = nil
   file_type_checker = ActionTracer::FileTypeChecker.new
+  logger = Logger.new
 
   TracePoint.trace(:call) do |tp|
     if callback_caller
       unless file_type_checker.libraly?(tp.path)
-        puts "-> #{tp.method_id}@#{tp.path}:#{tp.lineno} #{tp.defined_class}"
+        log = "#{tp.method_id}@#{tp.path}:#{tp.lineno} #{tp.defined_class}"
+        logger.info log
+        Rails.logger.info "[ACTION_TRACER] #{log}"
         callback_caller = nil
       end
     end
