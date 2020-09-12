@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ActionTracer
   class FilePathChecker
     def initialize(pwd_path)
