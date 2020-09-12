@@ -1,13 +1,19 @@
-module FileTypeChecker
-  def self.libraly?(path)
-    gem?(path) || ruby?(path)
+class FileTypeChecker
+  def initialize(path)
+    @path = path
   end
 
-  def self.gem?(path)
-    path.include? "/usr/local/bundle/gems"
+  def libraly?
+    gem? || ruby?
   end
 
-  def self.ruby?(path)
-    path.include? "/usr/local/lib/ruby"
+  private
+
+  def gem?
+    @path.include? "/usr/local/bundle/gems"
+  end
+
+  def ruby?
+    @path.include? "/usr/local/lib/ruby"
   end
 end

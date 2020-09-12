@@ -8,7 +8,7 @@ module ActionTracer
 
   TracePoint.trace(:call) do |tp|
     if callback_caller
-      unless FileTypeChecker.libraly?(tp.path)
+      unless FileTypeChecker.new(tp.path).libraly?
         puts "-> #{tp.method_id}@#{tp.path}:#{tp.lineno} #{tp.defined_class}"
         callback_caller = nil
       end
