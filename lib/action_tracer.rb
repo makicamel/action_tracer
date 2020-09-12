@@ -5,10 +5,11 @@ module ActionTracer
   class Error < StandardError; end
 
   callback_caller = nil
+  file_type_checker = FileTypeChecker.new
 
   TracePoint.trace(:call) do |tp|
     if callback_caller
-      unless FileTypeChecker.new(tp.path).libraly?
+      unless file_type_checker.libraly?(tp.path)
         puts "-> #{tp.method_id}@#{tp.path}:#{tp.lineno} #{tp.defined_class}"
         callback_caller = nil
       end
