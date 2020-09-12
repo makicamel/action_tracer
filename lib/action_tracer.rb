@@ -11,7 +11,7 @@ module ActionTracer
 
   TracePoint.trace(:call) do |tp|
     if callback_caller
-      unless file_type_checker.libraly?(tp.path)
+      if file_type_checker.app?(tp.path)
         log = "#{tp.method_id}@#{tp.path}:#{tp.lineno} #{tp.defined_class}"
         logger.info log
         Rails.logger.info "[ACTION_TRACER] #{log}"
