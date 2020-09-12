@@ -5,7 +5,7 @@ module ActionTracer
   class Error < StandardError; end
 
   callback_caller = nil
-  file_type_checker = FileTypeChecker.new
+  file_type_checker = ActionTracer::FileTypeChecker.new
 
   TracePoint.trace(:call) do |tp|
     if callback_caller
