@@ -24,6 +24,4 @@ module ActionTracer
       end
     end
   end
-
-  returner.enable
 end

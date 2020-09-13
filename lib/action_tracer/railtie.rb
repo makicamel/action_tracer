@@ -22,6 +22,7 @@ module ActionTracer
   class Railtie < ::Rails::Railtie
     initializer "action_tracer" do
       ActionTracer.config
+      ActionTracer.returner.enable
     end
   end
 end
