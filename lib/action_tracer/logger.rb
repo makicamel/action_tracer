@@ -7,9 +7,12 @@ module ActionTracer
     extend Forwardable
     def_delegators :@logger, :info
 
-    def initialize(path: "action_tracer.log", directory: "log")
-      path = Pathname.pwd + directory + path
-      @logger = ::Logger.new(path)
+    def initialize
+      @logger = ::Logger.new(ActionTracer.config.path)
     end
+  end
+
+  def self.logger
+    @logger ||= Logger.new
   end
 end
