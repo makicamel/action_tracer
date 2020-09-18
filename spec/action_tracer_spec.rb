@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe ActionTracer do
   it "has a version number" do
     expect(ActionTracer::VERSION).not_to be nil
