@@ -3,9 +3,9 @@
 module ActionTracer
   class Error < StandardError; end
 
-  def self.caller
-    @caller ||= TracePoint.new(:call) do |tp|
-      if tp.defined_class.is_a?(ActionController::Base) && tp.binding.receiver.action_name == tp.method_id.to_s
+  def self.returner
+    @returner ||= TracePoint.new(:return) do |tp|
+      if tp.defined_class == AbstractController::Base && tp.method_id == :process
         target = tp.binding.receiver
         filters = target.__callbacks[:process_action].send(:chain).map(&:filter)
         filters.each do |filter|
