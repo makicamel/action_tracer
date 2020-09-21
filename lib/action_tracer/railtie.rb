@@ -24,7 +24,6 @@ module ActionTracer
       ActiveSupport.on_load(:action_controller) do
         ActionTracer.config
         ActionTracer.caller.enable
-        ActionTracer.returner.enable
       end
     end
   end

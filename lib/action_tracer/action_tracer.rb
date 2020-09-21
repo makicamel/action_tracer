@@ -5,29 +5,14 @@ module ActionTracer
 
   def self.caller
     @caller ||= TracePoint.new(:call) do |tp|
-      if FilePathChecker.app_controller?(tp.path) && FilePathChecker.filter?
-        log = "#{tp.method_id}@#{tp.path}:#{tp.lineno} #{tp.defined_class}"
-        ActionTracer.logger.info log
-        Rails.logger.info "[ACTION_TRACER] #{log}"
-        self.callback_called = false
+      if tp.defined_class.is_a?(ActionController::Base) && tp.binding.receiver.action_name == tp.method_id.to_s
+        target = tp.binding.receiver
+        filters = target.__callbacks[:process_action].send(:chain).map(&:filter)
+        filters.each do |filter|
+          # TODO: when filter is Proc, log line_no
+          ActionTracer.logger.info target.method(filter).source_location.unshift(filter) if filter.is_a? Symbol
+        end
       end
     end
-  end
-
-  def self.returner
-    @returner ||= TracePoint.new(:return) do |tp|
-      # NOTE: ActiveSupport::Callbacks::CallTemplate is a private class
-      if tp.method_id == :expand && tp.defined_class == ActiveSupport::Callbacks::CallTemplate
-        self.callback_called = true
-      end
-    end
-  end
-
-  def self.callback_called=(callback_called)
-    @callback_called = callback_called
-  end
-
-  def self.callback_called?
-    !!@callback_called
   end
 end
