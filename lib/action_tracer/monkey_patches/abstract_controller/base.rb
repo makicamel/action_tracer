@@ -16,6 +16,7 @@ module ActionTracer
           # TODO: when filter is Proc, log line_no
           log = -> (method) { ActionTracer.logger.info method(method).source_location.unshift(method) if method.is_a? Symbol }
           [:before, :around].each { |key| filters[key].each(&log) }
+          log.call(action_name.to_sym)
           filters[:around].reverse_each(&log)
           filters[:after].each(&log)
           ActionTracer.logger.info ""
