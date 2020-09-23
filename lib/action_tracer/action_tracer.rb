@@ -8,7 +8,7 @@ module ActionTracer
       @returner ||= TracePoint.new(:return) do |tp|
         if tp.method_id == :expand && tp.defined_class == ActiveSupport::Callbacks::CallTemplate
           # target, block, method, *arguments = result
-          callbacks << tp.return_value[2] if tp.return_value.fetch(2) { nil }
+          applied_filters << tp.return_value[2] if tp.return_value.fetch(2) { nil }
         end
       end
     end
@@ -19,7 +19,7 @@ module ActionTracer
         .map { |kind, callbacks|
           [
             kind,
-            callbacks.map(&:filter).delete_if { |callback| self.callbacks.exclude? callback }
+            callbacks.map(&:filter).delete_if { |callback| applied_filters.exclude? callback }
           ]
         }.to_h
       # TODO: when filter is Proc, log line_no
@@ -33,8 +33,8 @@ module ActionTracer
 
     private
 
-    def callbacks
-      @callbacks ||= []
+    def applied_filters
+      @applied_filters ||= []
     end
   end
 end
