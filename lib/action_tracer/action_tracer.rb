@@ -3,23 +3,18 @@
 module ActionTracer
   class Error < StandardError; end
 
-  class Request
-    def initialize(controller)
-      @controller = controller
-    end
-
-    def log
-      ActionTracer.returner.enable
+  class << self
+    def log(controller)
+      returner.enable
       result = yield
-      ActionTracer.returner.disable
-      Filters.build(@controller).print
-      ActionTracer.applied_filters.clear
+      returner.disable
+      Filters.build(controller).print
+      applied_filters.clear
       ActionTracer.logger.info ""
+
       result
     end
-  end
 
-  class << self
     def returner
       @returner ||= TracePoint.new(:return) do |tp|
         # NOTE: ActiveSupport::Callbacks::CallTemplate is a private class
