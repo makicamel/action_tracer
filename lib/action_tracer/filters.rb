@@ -37,6 +37,7 @@ module ActionTracer
     def print
       printer = -> (filter) { ActionTracer.logger.info @controller.source_for(filter) }
       invoked_before.each { |filters| filters.each { |filter| printer.call(filter) } }
+      printer.call(@controller.action_name.to_sym)
       invoked_after.each { |filters| filters.reverse_each { |filter| printer.call(filter) } }
     end
 
