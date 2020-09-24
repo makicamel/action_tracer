@@ -5,9 +5,9 @@ module ActionTracer
 
   class << self
     def log(controller)
-      returner.enable
+      filter_collector.enable
       result = yield
-      returner.disable
+      filter_collector.disable
       Filters.build(controller).print
       applied_filters.clear
       ActionTracer.logger.info ""
@@ -15,8 +15,8 @@ module ActionTracer
       result
     end
 
-    def returner
-      @returner ||= TracePoint.new(:return) do |tp|
+    def filter_collector
+      @filter_collector ||= TracePoint.new(:return) do |tp|
         # NOTE: ActiveSupport::Callbacks::CallTemplate is a private class
         if tp.method_id == :expand && tp.defined_class == ActiveSupport::Callbacks::CallTemplate
           # target, block, method, *arguments = result
