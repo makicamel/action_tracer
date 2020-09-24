@@ -5,10 +5,9 @@ module ActionTracer
     module AbstractController
       module Callbacks
         def process_action(*args)
-          ActionTracer.returner.enable
-          super
-          ActionTracer.returner.disable
-          ActionTracer.logging(self)
+          ActionTracer::Request.new(self).log do
+            super
+          end
         end
       end
     end
