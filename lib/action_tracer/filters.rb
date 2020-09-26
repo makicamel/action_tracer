@@ -4,6 +4,7 @@ module ActionTracer
   class Filter
     APPLIED = { true => "APPLIED", false => "NO_APPLIED" }.freeze
     PROC = :Proc
+    attr_reader :applied
 
     def initialize(filter, method:)
       @filter = filter.is_a?(Symbol) ? filter : PROC
@@ -41,7 +42,7 @@ module ActionTracer
 
     def print
       invoked_before.map(&:to_a).each { |filter| ActionTracer.logger.info filter }
-      # printer.call(@action)
+      ActionTracer.logger.info ["ACTION", @action.name, *@action.source_location]
       invoked_after.map(&:to_a).reverse_each { |filter| ActionTracer.logger.info filter }
     end
 
