@@ -3,15 +3,20 @@
 module ActionTracer
   class Filter
     APPLIED = { true => "APPLIED", false => "NO_APPLIED" }.freeze
+    PROC = :Proc
 
     def initialize(filter, method:)
-      @filter = filter
+      @filter = filter.is_a?(Symbol) ? filter : PROC
       @method = method
       @applied = ActionTracer.applied_filters.include? filter
     end
 
-    def print
-      ActionTracer.logger.info [APPLIED[@applied], @filter, *@method.source_location]
+    def to_a
+      if @method.respond_to? :source_location
+        [APPLIED[@applied], @filter, *@method.source_location]
+      else
+        [APPLIED[@applied], @method]
+      end
     end
   end
 
@@ -35,19 +40,19 @@ module ActionTracer
     end
 
     def print
-      invoked_before.each { |filters| filters.each(&:print) }
+      invoked_before.map(&:to_a).each { |filter| ActionTracer.logger.info filter }
       # printer.call(@action)
-      invoked_after.each { |filters| filters.reverse_each(&:print) }
+      invoked_after.map(&:to_a).reverse_each { |filter| ActionTracer.logger.info filter }
     end
 
     private
 
     def invoked_before
-      [@before, @around]
+      @before + @around
     end
 
     def invoked_after
-      [@around, @after]
+      @around + @after
     end
   end
 end

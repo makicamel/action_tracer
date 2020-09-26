@@ -1,0 +1,42 @@
+
+lib/action_tracer/monkey_patches/abstract_controller/base.rb,433
+module ActionTracerActionTracer3,0
+  module MonkeyPatchesMonkeyPatches4,0
+  module MonkeyPatchesActionTracer::MonkeyPatches4,0
+    module AbstractControllerAbstractController5,0
+    module AbstractControllerActionTracer::MonkeyPatches::AbstractController5,0
+      module BaseBase6,0
+      module BaseActionTracer::MonkeyPatches::AbstractController::Base6,0
+        def process_action(action, *args)process_action10,0
+
+lib/action_tracer/railtie.rb,408
+module ActionTracerActionTracer5,0
+  class ConfigConfig6,0
+  class ConfigActionTracer::Config6,0
+    attr_reader :pathpath7,0
+    def initialize(directory:, file:)initialize9,0
+  def self.app_pathapp_path14,0
+  def self.config(directory: "/log/", file: "action_tracer.log")config18,0
+  class Railtie < ::Rails::RailtieRailtie22,0
+  class Railtie < ::Rails::RailtieActionTracer::Railtie22,0
+
+lib/action_tracer/logger.rb,274
+module ActionTracerActionTracer5,0
+  class Logger < ActiveSupport::LogSubscriberLogger6,0
+  class Logger < ActiveSupport::LogSubscriberActionTracer::Logger6,0
+    def_delegators :@logger, :infoinfo8,0
+    def initializeinitialize10,0
+  def self.loggerlogger15,0
+
+lib/action_tracer/action_tracer.rb,37
+module ActionTracerActionTracer3,0
+
+lib/action_tracer/file_path_checker.rb,141
+module ActionTracerActionTracer3,0
+  module FilePathCheckerFilePathChecker4,0
+  module FilePathCheckerActionTracer::FilePathChecker4,0
+
+lib/action_tracer/version.rb,115
+module ActionTracerActionTracer3,0
+  VERSION = "0.1.0"VERSION4,0
+  VERSION = "0.1.0"ActionTracer::VERSION4,0
