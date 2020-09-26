@@ -11,12 +11,7 @@ module ActionTracer
     end
 
     def print
-      case @filter
-      when Symbol
-        ActionTracer.logger.info [APPLIED[@applied], @filter, *@method.source_location]
-      when Proc
-        # TODO: when filter is Proc, log line_no
-      end
+      ActionTracer.logger.info [APPLIED[@applied], @filter, *@method.source_location]
     end
   end
 
@@ -32,9 +27,8 @@ module ActionTracer
       filters = { before: [], after: [], around: [] }
       raw_filters = controller.__callbacks[:process_action].send(:chain).group_by(&:kind)
       raw_filters.each do |kind, filter|
-        # TODO: when filter is Proc, log line_no
-        filters[kind] = filter.map(&:filter).select { |f| f.is_a? Symbol }.map do |f|
-          Filter.new(f, method: controller.method(f))
+        filters[kind] = filter.map(&:raw_filter).map do |f|
+          Filter.new(f, method: f.is_a?(Symbol) ? controller.method(f) : f)
         end
       end
       new(filters[:before], filters[:after], filters[:around], action: controller.method(controller.action_name))
