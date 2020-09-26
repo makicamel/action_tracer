@@ -1,44 +1,49 @@
 # frozen_string_literal: true
 
 module ActionTracer
-  module ActionControllerExt
-    # TODO: Use ActionController::Base or ActionController::API
-    refine AbstractController::Base do
-      def source_for(filter)
-        case filter
-        when Symbol
-          method(filter).source_location.unshift(filter)
-        when Proc
-          # TODO: when filter is Proc, log line_no
-        end
+  class Filter
+    APPLIED = { true => "APPLIED", false => "NO_APPLIED" }.freeze
+
+    def initialize(filter, method:)
+      @filter = filter
+      @method = method
+      @applied = ActionTracer.applied_filters.include? filter
+    end
+
+    def print
+      case @filter
+      when Symbol
+        ActionTracer.logger.info [APPLIED[@applied], @filter, *@method.source_location]
+      when Proc
+        # TODO: when filter is Proc, log line_no
       end
     end
   end
 
   class Filters
-    using ActionTracer::ActionControllerExt
-
-    def initialize(controller, before: [], after: [], around: [])
-      @controller = controller
+    def initialize(before = [], after = [], around = [], action:)
       @before = before
       @after = after
       @around = around
+      @action = action
     end
 
     def self.build(controller)
-      callback_chain = controller.__callbacks[:process_action].send(:chain)
-      filters = callback_chain
-        .group_by(&:kind)
-        .map { |kind, callbacks| [kind, callbacks.map(&:filter) & ActionTracer.applied_filters] }
-        .to_h
-      new(controller, before: filters[:before], after: filters[:after], around: filters[:around])
+      filters = { before: [], after: [], around: [] }
+      raw_filters = controller.__callbacks[:process_action].send(:chain).group_by(&:kind)
+      raw_filters.each do |kind, filter|
+        # TODO: when filter is Proc, log line_no
+        filters[kind] = filter.map(&:filter).select { |f| f.is_a? Symbol }.map do |f|
+          Filter.new(f, method: controller.method(f))
+        end
+      end
+      new(filters[:before], filters[:after], filters[:around], action: controller.method(controller.action_name))
     end
 
     def print
-      printer = -> (filter) { ActionTracer.logger.info @controller.source_for(filter) }
-      invoked_before.each { |filters| filters.each { |filter| printer.call(filter) } }
-      printer.call(@controller.action_name.to_sym)
-      invoked_after.each { |filters| filters.reverse_each { |filter| printer.call(filter) } }
+      invoked_before.each { |filters| filters.each(&:print) }
+      # printer.call(@action)
+      invoked_after.each { |filters| filters.reverse_each(&:print) }
     end
 
     private
