@@ -10,8 +10,8 @@ Gem::Specification.new do |spec|
   spec.authors     = ["makicamel"]
   spec.email       = ["unright@gmail.com"]
   spec.homepage    = "https://github.com/makicamel/action_tracer"
-  spec.summary     = "Show Rails actions and filter chains"
-  spec.description = "Show Rails actions and filter chains"
+  spec.summary     = "Log Rails application actions and filters when accepts a request"
+  spec.description = "Log Rails application actions and filters when accepts a request"
   spec.license     = "MIT"
 
   if spec.respond_to?(:metadata)
