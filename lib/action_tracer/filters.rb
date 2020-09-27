@@ -16,7 +16,7 @@ module ActionTracer
       if @method.respond_to? :source_location
         [APPLIED[@applied], @filter, *@method.source_location]
       else
-        [APPLIED[@applied], @method]
+        ["UNRECOGNIZED", @method]
       end
     end
   end
