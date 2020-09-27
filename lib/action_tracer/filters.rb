@@ -53,7 +53,7 @@ module ActionTracer
     end
 
     def invoked_after
-      @around + @after
+      @after + @around
     end
   end
 end
