@@ -10,6 +10,9 @@ Add this line to your application's Gemfile:
 gem 'action_tracer', group :development, :test
 ```
 
+Notice this gem is for Rails with ApplicationController inherited ActiveController::Base.  
+Support for Rails application with ActiveController::API is comming soon.
+
 ## Usage
 
 Run rails server or run rspec with `ACTION_TRACER=1` to log actions and filters for `log/action_tracer.log`.
@@ -120,6 +123,7 @@ We can't recgnize the filter is actually executed or not.
 
 ## CommingFeatures
 
+- Support for Rails application with ActiveController::API
 - Add non-checking mode
   - Memorizing filters are applied or not is very costly.  
   Add non-checking mode filters are actually applied or not.
