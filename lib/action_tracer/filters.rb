@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 module ActionTracer
+  APPLIED = { true => "APPLIED", false => "NO_APPLIED", unrecognized: "UNRECOGNIZED", action: "ACTION" }.freeze
+
   class Filter
-    APPLIED = { true => "APPLIED", false => "NO_APPLIED" }.freeze
     PROC = :Proc
     attr_reader :applied
 
@@ -16,7 +17,7 @@ module ActionTracer
       if @method.respond_to? :source_location
         [APPLIED[@applied], @filter, *@method.source_location]
       else
-        ["UNRECOGNIZED", @method]
+        [APPLIED[:unrecognized], @method]
       end
     end
   end
@@ -42,7 +43,7 @@ module ActionTracer
 
     def print
       invoked_before.map(&:to_a).each { |filter| ActionTracer.logger.info filter }
-      ActionTracer.logger.info ["ACTION", @action.name, *@action.source_location]
+      ActionTracer.logger.info [APPLIED[:action], @action.name, *@action.source_location]
       invoked_after.map(&:to_a).reverse_each { |filter| ActionTracer.logger.info filter }
     end
 
