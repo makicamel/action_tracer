@@ -15,31 +15,7 @@ Support for Rails application with ActiveController::API is comming soon.
 
 ## Usage
 
-Run rails server or run rspec with `ACTION_TRACER=1` to log actions and filters for `log/action_tracer.log`.
-
-```bash
-$ ACTION_TRACER=1 rails server
-```
-
-You can also run rspec for your request specs.
-
-```bash
-$ ACTION_TRACER=1 rspec
-```
-
-If you use docker-compose, pass environment variable:
-
-```yml
-version: 3
-services:
-  web:
-    build: .
-    command: bundle exec rails s -p 3000
-    environment:
-      ACTION_TRACER: 1
-    volumes:
-      # ...
-```
+Run rails server or run rspec and check `log/action_tracer.log`.
 
 ### Example
 
@@ -78,7 +54,7 @@ private
 end
 ```
 
-When you run rails server with `ACTION_TRACER=1` and access `/awesome` (action is `#index`),    
+When you run rails server and access `/awesome` (action is `#index`),  
 it will put logs for `log/action_tracer.log` like this:
 
 ```log
@@ -124,9 +100,6 @@ We can't recgnize the filter is actually executed or not.
 ## CommingFeatures
 
 - Support for Rails application with ActiveController::API
-- Add non-checking mode
-  - Memorizing filters are applied or not is very costly.  
-  Add non-checking mode filters are actually applied or not.
 - Log rotate
 
 ## Contributing
