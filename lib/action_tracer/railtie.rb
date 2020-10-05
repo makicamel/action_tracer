@@ -22,6 +22,8 @@ module ActionTracer
   class Railtie < ::Rails::Railtie
     initializer "action_tracer" do
       ActiveSupport.on_load(:action_controller) do
+        require "action_tracer/monkey_patches/active_support/callbacks"
+        ::ActiveSupport::Callbacks::CallTemplate.prepend ActionTracer::MonkeyPatches::ActiveSupport::Callbacks::CallTemplate
         require "action_tracer/monkey_patches/abstract_controller/callbacks"
         ::ActionController::Base.prepend ActionTracer::MonkeyPatches::AbstractController::Callbacks
 
