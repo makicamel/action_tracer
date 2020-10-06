@@ -22,6 +22,27 @@ module ActionTracer
     end
   end
 
+  class Action
+    def initialize(name:, method:)
+      @name = name
+      @method = method
+    end
+
+    def self.build(controller)
+      method = controller.respond_to?(controller.action_name) ? controller.method(controller.action_name) : nil_method
+      new(name: controller.action_name, method: method)
+    end
+
+    def to_a
+      [APPLIED[:action], @name, *@method.source_location]
+    end
+
+    def self.nil_method
+      method(:p)
+    end
+    private_class_method :nil_method
+  end
+
   class Filters
     def initialize(before = [], after = [], around = [], action:)
       @before = before
@@ -38,12 +59,12 @@ module ActionTracer
           Filter.new(f, method: f.is_a?(Symbol) ? controller.method(f) : f)
         end
       end
-      new(filters[:before], filters[:after], filters[:around], action: controller.method(controller.action_name))
+      new(filters[:before], filters[:after], filters[:around], action: Action.build(controller))
     end
 
     def print
       invoked_before.map(&:to_a).each { |filter| ActionTracer.logger.info filter }
-      ActionTracer.logger.info [APPLIED[:action], @action.name, *@action.source_location]
+      ActionTracer.logger.info @action.to_a
       invoked_after.map(&:to_a).reverse_each { |filter| ActionTracer.logger.info filter }
     end
 
