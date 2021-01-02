@@ -23,5 +23,11 @@ module MinitestHelper
     @action_tracer_path ||= File.expand_path('../log/action_tracer.log', __dir__)
   end
 
+  def filters
+    log = File.read action_tracer_path
+    log.lines.map do |line|
+      status, method = line.scan(/"(APPLIED|NO_APPLIED|ACTION)", [:"](\w*)"?,/)[0]
+      method ? [method.to_sym, status] : nil
+    end.compact.flatten
   end
 end

@@ -7,5 +7,7 @@
 /spec/reports/
 /tmp/
 /log/
+/test/log/
+/test/tmp/
 Gemfile.lock
 .byebug_history
