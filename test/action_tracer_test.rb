@@ -2,8 +2,9 @@
 
 require_relative 'test_helper'
 
-class ActionTracerTest < Minitest::Test
-  def test_it_has_version_number
-    assert ActionTracer::VERSION
+class ActionTracerTest < ActionDispatch::IntegrationTest
+  include MinitestHelper
+  setup { File.write action_tracer_path, '' }
+
   end
 end

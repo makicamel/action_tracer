@@ -17,3 +17,11 @@ module ActionTracerTestApp
 end
 
 ActionTracerTestApp::Application.initialize!
+
+module MinitestHelper
+  def action_tracer_path
+    @action_tracer_path ||= File.expand_path('../log/action_tracer.log', __dir__)
+  end
+
+  end
+end
