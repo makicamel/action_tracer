@@ -6,6 +6,7 @@ module ActionTracer
   class << self
     def log(controller)
       result = yield
+    ensure
       Filters.build(controller).print
       applied_filters.clear
       ActionTracer.logger.info ""

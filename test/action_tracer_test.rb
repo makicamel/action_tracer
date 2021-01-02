@@ -37,4 +37,12 @@ class ActionTracerTest < ActionDispatch::IntegrationTest
       :index, ActionTracer::APPLIED[:action]
     ]
   end
+
+  test 'to return filters even when action raise error' do
+    get '/exceptions'
+    assert_equal filters, [
+      :before, ActionTracer::APPLIED[true],
+      :index, ActionTracer::APPLIED[:action]
+    ]
+  end
 end

@@ -47,3 +47,15 @@ class HaltsController < ActionController::Base
   def halt_filter; render json: {}, status: 400; end
   def not_called; end
 end
+
+class ExceptionsController < ActionController::Base
+  before_action :before
+
+  def index
+    raise RuntimeError
+  end
+
+  private
+
+  def before; end
+end
