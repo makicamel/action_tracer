@@ -30,5 +30,9 @@ module ActionTracer
         ActionTracer.config
       end
     end
+
+    rake_tasks do
+      load "#{__dir__}/tasks/action_tracer.rake"
+    end
   end
 end
