@@ -38,6 +38,15 @@ class ActionTracerTest < ActionDispatch::IntegrationTest
     ]
   end
 
+  test 'to return filters even when redirected before action is called' do
+    get '/redirects'
+    assert_equal filters, [
+      :redirect, ActionTracer::APPLIED[true],
+      :index, ActionTracer::APPLIED[:action],
+      :not_called, ActionTracer::APPLIED[false]
+    ]
+  end
+
   test 'to return filters even when action raise error' do
     get '/exceptions'
     assert_equal filters, [

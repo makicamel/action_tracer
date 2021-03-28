@@ -48,6 +48,21 @@ class HaltsController < ActionController::Base
   def not_called; end
 end
 
+class RedirectsController < ActionController::Base
+  before_action :redirect
+  after_action :not_called
+
+  def index; end
+
+  private
+
+  def redirect
+    redirect_to '/orders'
+  end
+
+  def not_called; end
+end
+
 class ExceptionsController < ActionController::Base
   before_action :before
 
