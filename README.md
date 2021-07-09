@@ -7,7 +7,7 @@ Log Rails application actions and filters when accepts a request.
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'action_tracer', group :development, :test
+gem 'action_tracer', group: [:development, :test]
 ```
 
 Notice this gem is for Rails with ApplicationController inherited ActiveController::Base.  
