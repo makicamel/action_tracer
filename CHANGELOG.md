@@ -1,3 +1,7 @@
+## 0.2.3
+
+* Deal with Rails7.x.
+
 ## 0.2.2
 
 * Log filters even when controllers raise error.

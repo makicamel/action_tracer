@@ -56,11 +56,17 @@ module ActionTracer
         filters = { before: [], after: [], around: [] }
         raw_filters = controller.__callbacks[:process_action].send(:chain).group_by(&:kind)
         raw_filters.each do |kind, filter|
-          filters[kind] = filter.map(&:raw_filter).map do |f|
+          filters[kind] = filter.map { |f| f.__send__(filter_method) }.map do |f|
             Filter.new(f, method: f.is_a?(Symbol) ? controller.method(f) : f)
           end
         end
         new(filters[:before], filters[:after], filters[:around], action: Action.build(controller))
+      end
+
+      private
+
+      def filter_method
+        @filter_method ||= Rails::VERSION::MAJOR > 6 ? :filter : :raw_filter
       end
     end
 
