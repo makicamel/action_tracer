@@ -51,15 +51,17 @@ module ActionTracer
       @action = action
     end
 
-    def self.build(controller)
-      filters = { before: [], after: [], around: [] }
-      raw_filters = controller.__callbacks[:process_action].send(:chain).group_by(&:kind)
-      raw_filters.each do |kind, filter|
-        filters[kind] = filter.map(&:raw_filter).map do |f|
-          Filter.new(f, method: f.is_a?(Symbol) ? controller.method(f) : f)
+    class << self
+      def build(controller)
+        filters = { before: [], after: [], around: [] }
+        raw_filters = controller.__callbacks[:process_action].send(:chain).group_by(&:kind)
+        raw_filters.each do |kind, filter|
+          filters[kind] = filter.map(&:raw_filter).map do |f|
+            Filter.new(f, method: f.is_a?(Symbol) ? controller.method(f) : f)
+          end
         end
+        new(filters[:before], filters[:after], filters[:around], action: Action.build(controller))
       end
-      new(filters[:before], filters[:after], filters[:around], action: Action.build(controller))
     end
 
     def print
