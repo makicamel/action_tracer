@@ -1,3 +1,7 @@
+## 0.2.4
+
+* Fix bug for Rails7.x support.
+
 ## 0.2.3
 
 * Deal with Rails7.x.
