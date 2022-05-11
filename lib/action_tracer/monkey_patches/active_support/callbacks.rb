@@ -12,11 +12,11 @@ module ActionTracer
               end
 
               def make_lambda
-                super >> proc { ActionTracer.applied_filters << @method_name }
+                super >> proc { |result| ActionTracer.applied_filters << @method_name; result }
               end
 
               def inverted_lambda
-                super >> proc { ActionTracer.applied_filters << @method_name }
+                super >> proc { |result| ActionTracer.applied_filters << @method_name; result }
               end
             end
 
@@ -26,11 +26,11 @@ module ActionTracer
               end
 
               def make_lambda
-                super >> proc { ActionTracer.applied_filters << @override_target }
+                super >> proc { |result| ActionTracer.applied_filters << @override_target; result }
               end
 
               def inverted_lambda
-                super >> proc { ActionTracer.applied_filters << @override_target }
+                super >> proc { |result| ActionTracer.applied_filters << @override_target; result }
               end
             end
 
@@ -40,11 +40,11 @@ module ActionTracer
               end
 
               def make_lambda
-                super >> proc { ActionTracer.applied_filters << @override_block }
+                super >> proc { |result| ActionTracer.applied_filters << @override_block; result }
               end
 
               def inverted_lambda
-                super >> proc { ActionTracer.applied_filters << @override_block }
+                super >> proc { |result| ActionTracer.applied_filters << @override_block; result }
               end
             end
           else
