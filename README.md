@@ -97,6 +97,21 @@ When filter is an object, log is put in this format:
 
 We can't recgnize the filter is actually executed or not.
 
+### Configuration
+
+To customize how to output log, add `config/initializers/action_tracer.rb`:
+
+```ruby
+ActionTracer.configure do |config|
+  # when you want to output log to stdout
+  config.logger = Rails.logger
+end
+```
+
+- `logger`: Injectable logger. For example, to specify to output log to stdout.
+- `directory`: The directory to put log. In default `/log/`.
+- `file_name`: The log file name. In default `action_tracer.log`.
+
 ## CommingFeatures
 
 - Support for Rails application with ActiveController::API

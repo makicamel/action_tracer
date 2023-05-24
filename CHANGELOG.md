@@ -1,3 +1,7 @@
+## 0.2.5
+
+* Be able to inject logger
+
 ## 0.2.4
 
 * Fix bug for Rails7.x support.
