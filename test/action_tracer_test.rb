@@ -10,14 +10,14 @@ class ActionTracerTest < ActionDispatch::IntegrationTest
     get '/orders'
     assert_equal filters, [
       :before_1st, ActionTracer::APPLIED[true],
-      :before_2nd, ActionTracer::APPLIED[true],
       :around_1st, ActionTracer::APPLIED[true],
+      :before_2nd, ActionTracer::APPLIED[true],
       :around_2nd, ActionTracer::APPLIED[true],
       :index, ActionTracer::APPLIED[:action],
       :around_2nd, ActionTracer::APPLIED[true],
-      :around_1st, ActionTracer::APPLIED[true],
       :after_2nd, ActionTracer::APPLIED[true],
       :after_1st, ActionTracer::APPLIED[true],
+      :around_1st, ActionTracer::APPLIED[true],
     ]
   end
 

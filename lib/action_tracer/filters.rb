@@ -7,8 +7,9 @@ module ActionTracer
     PROC = :Proc
     attr_reader :applied
 
-    def initialize(filter, method:)
+    def initialize(filter, kind:, method:)
       @filter = filter.is_a?(Symbol) ? filter : PROC
+      @kind = kind
       @method = method
       @applied = ActionTracer.applied_filters.include? filter
     end
@@ -19,6 +20,14 @@ module ActionTracer
       else
         [APPLIED[:unrecognized], @method]
       end
+    end
+
+    def before?
+      @kind == :before || @kind == :around
+    end
+
+    def after?
+      @kind == :after || @kind == :around
     end
   end
 
@@ -44,23 +53,23 @@ module ActionTracer
   end
 
   class Filters
-    def initialize(before = [], after = [], around = [], action:)
-      @before = before
-      @after = after
-      @around = around
+    def initialize(filters:, action:)
+      @filters = filters
       @action = action
     end
 
     class << self
       def build(controller)
-        filters = { before: [], after: [], around: [] }
-        raw_filters = controller.__callbacks[:process_action].send(:chain).group_by(&:kind)
-        raw_filters.each do |kind, filter|
-          filters[kind] = filter.map { |f| f.__send__(filter_method) }.map do |f|
-            Filter.new(f, method: f.is_a?(Symbol) ? controller.method(f) : f)
-          end
+        raw_filters = controller.__callbacks[:process_action].__send__(:chain)
+        filters = raw_filters.map do |raw_filter|
+          filter = raw_filter.__send__(filter_method)
+          Filter.new(
+            filter,
+            kind: raw_filter.kind,
+            method: filter.is_a?(Symbol) ? controller.method(filter) : filter
+          )
         end
-        new(filters[:before], filters[:after], filters[:around], action: Action.build(controller))
+        new(filters: filters, action: Action.build(controller))
       end
 
       private
@@ -73,17 +82,17 @@ module ActionTracer
     def print
       invoked_before.map(&:to_a).each { |filter| ActionTracer.logger.info filter }
       ActionTracer.logger.info @action.to_a
-      invoked_after.map(&:to_a).reverse_each { |filter| ActionTracer.logger.info filter }
+      invoked_after.map(&:to_a).each { |filter| ActionTracer.logger.info filter }
     end
 
     private
 
     def invoked_before
-      @before + @around
+      @filters.select(&:before?)
     end
 
     def invoked_after
-      @after + @around
+      @filters.select(&:after?).reverse
     end
   end
 end

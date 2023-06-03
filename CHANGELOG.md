@@ -1,6 +1,7 @@
 ## 0.2.5
 
-* Be able to inject logger
+* Be able to inject logger.
+* Fix around_action ordering bug.
 
 ## 0.2.4
 
