@@ -29,6 +29,14 @@ class ActionTracerTest < ActionDispatch::IntegrationTest
     ]
   end
 
+  test 'an undefined action log is output' do
+    get '/undefined_methods'
+    assert_equal filters, [
+      :before, ActionTracer::APPLIED[true],
+      :index, ActionTracer::APPLIED[:action],
+    ]
+  end
+
   test 'not called filter\'s status is NO_APPLIED' do
     get '/halts'
     assert_equal filters, [

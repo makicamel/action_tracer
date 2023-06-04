@@ -34,6 +34,14 @@ class ConditionsController < ActionController::Base
   def excluded; end
 end
 
+class UndefinedMethodsController < ActionController::Base
+  before_action :before
+
+  private
+
+  def before; end
+end
+
 class HaltsController < ActionController::Base
   before_action :halt_filter
   before_action :not_called

@@ -1,3 +1,7 @@
+## 0.2.6
+
+* Fix bug when actions aren't defined in the controller.
+
 ## 0.2.5
 
 * Be able to inject logger.
