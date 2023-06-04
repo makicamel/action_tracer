@@ -2,6 +2,7 @@
 
 * Be able to inject logger.
 * Fix around_action ordering bug.
+* Be able to omit source_location path.
 
 ## 0.2.4
 

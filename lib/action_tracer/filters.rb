@@ -16,7 +16,9 @@ module ActionTracer
 
     def to_a
       if @method.respond_to? :source_location
-        [APPLIED[@applied], @filter, *@method.source_location]
+        source_location, line_number = *@method.source_location
+        source_location = source_location.sub(::ActionTracer.config.omitted_source_location_path, '')
+        [APPLIED[@applied], @filter, source_location, line_number].compact
       else
         [APPLIED[:unrecognized], @method]
       end
@@ -43,7 +45,9 @@ module ActionTracer
     end
 
     def to_a
-      [APPLIED[:action], @name, *@method.source_location]
+      source_location, line_number = *@method.source_location
+      source_location = source_location.sub(::ActionTracer.config.omitted_source_location_path, '')
+      [APPLIED[:action], @name, source_location, line_number].compact
     end
 
     def self.nil_method

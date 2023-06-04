@@ -2,7 +2,7 @@
 
 module ActionTracer
   class Configration
-    attr_writer :app_path, :directory, :file_name, :logger
+    attr_writer :app_path, :directory, :file_name, :logger, :omitted_source_location_paths
 
     def app_path
       @app_path ||= Dir.pwd
@@ -18,6 +18,14 @@ module ActionTracer
 
     def logger
       @logger ||= Logger.new(app_path + directory + file_name)
+    end
+
+    def omitted_source_location_paths
+      @omitted_source_location_paths ||= ["#{Dir.pwd}/"]
+    end
+
+    def omitted_source_location_path
+      @omitted_source_location_path ||= %r{#{omitted_source_location_paths.join('|')}}
     end
   end
 
