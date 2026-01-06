@@ -10,7 +10,7 @@ gemspec
 rails_version = ENV['RAILS_VERSION']
 if rails_version
   version = "~> #{rails_version}"
-  %w[actionpack activesupport].each do |gem_name|
+  %w[actionpack activesupport railties].each do |gem_name|
     gem gem_name, version
   end
 end
