@@ -13,5 +13,8 @@ if rails_version
   %w[actionpack activesupport railties].each do |gem_name|
     gem gem_name, version
   end
+else
+  %w[actionpack activesupport railties].each do |gem_name|
+    gem gem_name
+  end
 end
-
