@@ -65,7 +65,7 @@ class RedirectsController < ActionController::Base
   private
 
   def redirect
-    redirect_to '/orders'
+    redirect_to "/orders"
   end
 
   def not_called; end

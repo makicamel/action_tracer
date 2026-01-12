@@ -9,11 +9,11 @@ module ActionTracer
     end
 
     def directory
-      @directory ||= '/log/'
+      @directory ||= "/log/"
     end
 
     def file_name
-      @file_name ||= 'action_tracer.log'
+      @file_name ||= "action_tracer.log"
     end
 
     def logger
