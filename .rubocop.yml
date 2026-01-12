@@ -52,10 +52,10 @@ Layout/SpaceInLambdaLiteral:
 Layout/MultilineMethodCallIndentation:
   EnforcedStyle: indented
 
-Lint/RedundantRequireStatement:
+Lint/BinaryOperatorWithIdenticalOperands:
   Enabled: true
 
-Lint/UselessComparison:
+Lint/RedundantRequireStatement:
   Enabled: true
 
 Lint/UselessElseWithoutRescue:
@@ -75,3 +75,27 @@ Style/StringLiterals:
 
 Style/EndBlock:
   Enabled: true
+
+Style/TrailingCommaInArrayLiteral:
+  Enabled: false
+
+Style/Semicolon:
+  Exclude:
+    - "lib/action_tracer/monkey_patches/active_support/callbacks.rb"
+
+Style/SingleLineMethods:
+  Exclude:
+    - "test/fake_app.rb"
+
+Style/RegexpLiteral:
+  Enabled: false
+
+Metrics/BlockLength:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
+
+# TODO: Decide which Ruby version to support
+Gemspec/RequiredRubyVersion:
+  Enabled: false
