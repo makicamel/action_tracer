@@ -6,5 +6,6 @@ Rails.application.routes.draw do
   get :undefined_methods, to: 'undefined_methods#index'
   get :halts, to: 'halts#index'
   get :redirects, to: 'redirects#index'
+  get :procs, to: 'procs#index'
   get :exceptions, to: 'exceptions#index'
 end

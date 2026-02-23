@@ -71,6 +71,14 @@ class RedirectsController < ActionController::Base
   def not_called; end
 end
 
+class ProcsController < ActionController::Base
+  before_action -> { @value = 1 }
+
+  def index
+    render json: {}, status: 200
+  end
+end
+
 class ExceptionsController < ActionController::Base
   before_action :before
 

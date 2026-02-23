@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module ActionTracer
-  APPLIED = { true => "APPLIED", false => "NO_APPLIED", unrecognized: "UNRECOGNIZED", action: "ACTION" }.freeze
+  APPLIED = { true => "APPLIED", false => "NO_APPLIED", not_traced: "NOT_TRACED", unrecognized: "UNRECOGNIZED", action: "ACTION" }.freeze
 
   class Filter
     PROC = :Proc
@@ -11,7 +11,7 @@ module ActionTracer
       @filter = filter.is_a?(Symbol) ? filter : PROC
       @kind = kind
       @method = method
-      @applied = ActionTracer.applied_filters.include? filter
+      @applied = filter.is_a?(Symbol) ? ActionTracer.applied_filters.include?(filter) : :not_traced
     end
 
     def to_a

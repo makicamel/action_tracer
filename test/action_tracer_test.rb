@@ -55,6 +55,14 @@ class ActionTracerTest < ActionDispatch::IntegrationTest
     ]
   end
 
+  test 'proc filter status is NOT_TRACED' do
+    get '/procs'
+    assert_equal filters, [
+      :Proc, ActionTracer::APPLIED[:not_traced],
+      :index, ActionTracer::APPLIED[:action],
+    ]
+  end
+
   test 'to return filters even when action raise error' do
     get '/exceptions'
     assert_equal filters, [

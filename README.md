@@ -27,7 +27,7 @@ class AwesomeController < ApplicationController
   before_action :set_awesome, only: :show
   around_action :with_readonly
   after_action :store_location
-  
+
   def index
    # ...
   end
@@ -67,7 +67,7 @@ I, [2020-09-27T03:25:43.025547 #1]  INFO -- : ["ACTION", :index, "app/controller
 I, [2020-09-27T03:25:43.026297 #1]  INFO -- : ["APPLIED", :with_readonly, "app/controllers/awesome_controller.rb", 21]
 I, [2020-09-27T03:25:43.027203 #1]  INFO -- : ["APPLIED", :store_location, "app/controllers/awesome_controller.rb", 27]
 I, [2020-09-27T03:25:43.030074 #1]  INFO -- : ["APPLIED", :verify_same_origin_request, "/usr/local/bundle/gems/actionpack-5.1.7/lib/action_controller/metal/request_forgery_protection.rb", 240]
-I, [2020-09-27T03:25:43.030776 #1]  INFO -- : 
+I, [2020-09-27T03:25:43.030776 #1]  INFO -- :
 ```
 
 Filters are put in the order in which is executed.  
@@ -81,9 +81,10 @@ Normally log is put in this format:
 ["APPLIED", :require_login, "app/controllers/awesome_controller.rb", 17]
 ```
 
-1. State. One of `APPLIED`, `NO_APPLIED` and `ACTION`.  
+1. State. One of `APPLIED`, `NO_APPLIED`, `NOT_TRACED` and `ACTION`.
 `APPLIED`: Filter is executed.  
 `NO_APPLIED`: Filter is registered but not executed.  
+`NOT_TRACED`: Filter is a Proc. Execution status is not traced.  
 `ACTION`: Called action.
 2. Method name. When filter is a Proc, just put `:Proc`.
 3. File path. In your application directory, it's omitted path. See Configuration section for details.
