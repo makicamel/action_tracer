@@ -70,4 +70,11 @@ class ActionTracerTest < ActionDispatch::IntegrationTest
       :index, ActionTracer::APPLIED[:action]
     ]
   end
+
+  test 'source_location points to user code instead of action_tracer' do
+    get '/orders'
+    source_locations.each do |method_name, path|
+      assert_match 'test/fake_app.rb', path
+    end
+  end
 end

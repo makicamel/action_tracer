@@ -30,4 +30,11 @@ module MinitestHelper
       method ? [method.to_sym, status] : nil
     end.compact.flatten
   end
+
+  def source_locations
+    File.read(action_tracer_path).lines.filter_map do |line|
+      match = line.match(/"(?:APPLIED|NO_APPLIED|NOT_TRACED|ACTION)", [:"](\w*)"?,?\s*,?\s*"([^"]*)"/)
+      match ? [match[1].to_sym, match[2]] : nil
+    end
+  end
 end

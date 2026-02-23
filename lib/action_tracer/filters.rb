@@ -67,10 +67,16 @@ module ActionTracer
         raw_filters = controller.__callbacks[:process_action].__send__(:chain)
         filters = raw_filters.map do |raw_filter|
           filter = raw_filter.__send__(filter_method)
+          if filter.is_a?(Symbol)
+            method = controller.method(filter)
+            method = method.super_method while method.owner.name.nil?
+          else
+            method = filter
+          end
           Filter.new(
             filter,
             kind: raw_filter.kind,
-            method: filter.is_a?(Symbol) ? controller.method(filter) : filter
+            method: method,
           )
         end
         new(filters: filters, action: Action.build(controller))
