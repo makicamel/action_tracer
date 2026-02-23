@@ -1,3 +1,8 @@
+## 0.2.7
+
+* Fix a bug where the execution result was always "NOT_APPLIED".
+* Modify to always set Proc to "NOT_TRACED".
+
 ## 0.2.6
 
 * Fix bug when actions aren't defined in the controller.
