@@ -5,6 +5,7 @@ module ActionTracer
     module AbstractController
       module Callbacks
         def process_action(*args)
+          ActionTracer.wrap_callbacks(self)
           ActionTracer.log(self) do
             super
           end
